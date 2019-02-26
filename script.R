@@ -123,7 +123,7 @@ co2.emissions
 ################################
 
 # reading a data frame from the CSV file
-beatles <- read.csv("beatles_v0.csv", stringsAsFactors = FALSE)
+beatles <- read.csv("data/beatles_v1.csv", stringsAsFactors = FALSE)
 beatles
 
 # print the number of rows

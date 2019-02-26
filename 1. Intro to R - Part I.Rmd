@@ -168,13 +168,13 @@ co2.emissions
 
 ## Loading data frame from a file
 
-Data can be loaded from a file. The most used file formats are CSV (Comma Separated Values) and TSV (Tab Separated Values). In order to read a CSV file *beatles_v0.csv*, we can use the *read.csv* function. By setting the argument *stringsAsFactors* to FALSE, strings will not be converted to factors (which is the default setting).
+Data can be loaded from a file. The most used file formats are CSV (Comma Separated Values) and TSV (Tab Separated Values). In order to read a CSV file *data/beatles_v1.csv*, we can use the *read.csv* function. By setting the argument *stringsAsFactors* to FALSE, strings will not be converted to factors (which is the default setting).
 
 ### read.csv
 
 ```{r}
 # reading a data frame from the CSV file
-beatles <- read.csv("beatles_v0.csv", stringsAsFactors = FALSE)
+beatles <- read.csv("data/beatles_v1.csv", stringsAsFactors = FALSE)
 beatles
 ```
 
