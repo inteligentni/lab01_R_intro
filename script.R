@@ -8,14 +8,17 @@ x
 print(class(x))
 
 # Integer
-x <- 5L
+x <- 5
 x
+print(class(x))
+x <- 5L
 print(class(x))
 
 # Character
 x <- "Hello"
 x
 print(class(x))
+x == 'Hello' # use either single or double quotes
 
 # Logical (true/false)
 x <- TRUE
@@ -58,10 +61,13 @@ prod(v1)
 ################################
 
 # generate a sequence from 1 to 10
-1:10
+a <- 1:10
+a
 
 # generate a sequence from 10 to 1
-10:1
+b <- 10:1
+b
+rev(a)
 
 # generate a sequence from 3.2 to 4.7, with a step 0.2
 seq(3.2, 4.7, by = 0.2)
@@ -72,9 +78,13 @@ seq(3.2, 4.7, by = 0.2)
 
 # create a vector and convert to factor
 v2 <- c("cold", "mild", "mild", "hot", "cold")
-temp <- factor(v2)
+temp <- as.factor(v2)
 
-# print all levels 
+# print unique factor values (levels)
+levels(temp)
+
+# specify the order of levels
+temp <- factor(v2, levels = c('cold', 'mild', 'hot'))
 levels(temp)
 
 # print the summary
@@ -87,9 +97,12 @@ summary(temp)
 # check which values are NAs
 v3 <- c(1, NA, 3, 4, NA)
 is.na(v3)
+sum(is.na(v3))
 
 # NaN missing value
-0/0
+x <- 0/0
+is.na(x)
+is.nan(x)
 
 ################################
 # Data frame
@@ -124,7 +137,10 @@ co2.emissions
 
 # reading a data frame from the CSV file
 beatles <- read.csv("data/beatles_v1.csv", stringsAsFactors = FALSE)
-beatles
+
+# head and tail functions
+head(beatles)
+tail(beatles)
 
 # print the number of rows
 nrow(beatles)
@@ -132,21 +148,17 @@ nrow(beatles)
 # print the number of columns
 ncol(beatles)
 
-# summary function
-summary(beatles)
-
 # str function
 str(beatles)
 
-# head and tail functions
-head(beatles)
-tail(beatles)
+# summary function
+summary(beatles)
 
 # retrieve and change column names
-names(beatles)
+colnames(beatles)
 
 beatles1 <- beatles
-names(beatles1) <- c("song_name", "release_year", "duration")
+colnames(beatles1) <- c("song_name", "release_year", "duration")
 beatles1
 
 # remove column duration
@@ -158,15 +170,15 @@ beatles1
 ################################
 
 # get an element from the row 3, column 1 
-song <- beatles[3, 1]
-song
+song3_title <- beatles[3, 1]
+song3_title
 
 # get the third row
-beatles.subset <- beatles[3,]
-beatles.subset
+song3 <- beatles[3,]
+song3
 
 # get rows at positions from 3 to 6 
-beatles.subset1 <- beatles[3:5,]
+beatles.subset1 <- beatles[3:6,]
 beatles.subset1
 
 # get rows at positions 3 and 6 
@@ -184,9 +196,15 @@ years
 # retrieve all songs released before year 1965
 songsBefore1965 <- beatles[beatles$Year < 1965,]
 songsBefore1965
+# alternative
+songsBefore1965 <- subset(beatles, Year < 1965)
+songsBefore1965
 
 # retrieve all songs released before year 1965 with duration lower than 150 seconds
 shortSongsBefore1965 <- beatles[beatles$Year < 1965 & beatles$Duration < 150,]
+shortSongsBefore1965
+# alternative
+shortSongsBefore1965 <- subset(beatles, Year < 1965 & Duration < 150)
 shortSongsBefore1965
 
 ################################
@@ -202,7 +220,11 @@ nrow(beatles[beatles$Year == 1965 & beatles$Duration > 120,])
 ################################
 
 # create a plot for the given vectors 
-plot(c(2, 8, 5), c(25, 10, 30))
+x <- seq(1, 30, length.out=15)
+x
+y <- seq(5, 35, length.out=15) + 2
+y
+plot(x, y)
 
 # include ggplot2 library
 install.packages("ggplot2")
@@ -211,36 +233,36 @@ library(ggplot2)
 # render a plot for the given data frame (columns Year and Duration)
 ggplot(beatles, aes(x=Year, y=Duration))
 
-# render a plot for the given data frame with points
+# render a scatter plot for Year and Duration 
 ggplot(beatles, aes(x=Year, y=Duration)) + geom_point()
 
-# render a bar chart
+# render a scatter plot with custom title and axes labels  
 ggplot(beatles, aes(x=Year, y=Duration)) + 
-  geom_col()
-
-# render a bar chart
-beatles$Year <- factor(beatles$Year)
-ggplot(beatles, aes(x=Year, y=Duration)) + 
-  geom_col()
-
-# render a bar chart with custom title and axes labels  
-ggplot(beatles, aes(x=Year, y=Duration, fill = Year)) + 
-  geom_col() +
+  geom_point() +
   xlab("Song release years") + ylab("Song duration") +
   ggtitle("Duration of songs throughout the years")
 
-# render a bar chart where the y-axis displays number of cases for each value on the x-axis
+# render a bar chart displaying the number of songs in each year
+ggplot(beatles, aes(x=Year)) + 
+  geom_bar()
+
+# improve the previous chart so that only years with songs are shown;
+# include title and axes labels
+beatles$Year <- as.factor(beatles$Year)
 ggplot(beatles, aes(x=Year, fill=Year)) + 
-  geom_bar() +
+  geom_bar(show.legend = FALSE) +
   xlab("Song release years") + ylab("Number of songs") +
   ggtitle("Number of songs throughout the years")
 
-# render a line chart for the first five songs with specific line and ponts properties
+
+# render a line chart (Year, Duration) for the first five songs 
+# with specific line and points properties
 ggplot(beatles[1:5,], aes(x=Year, y=Duration, group = 1)) +
-  geom_line(colour = "blue", linetype = "dotted", size = 2) + 
-  geom_point(colour="green", size = 4, shape = 22, fill = "yellow") +
+  geom_line(colour = "steelblue4", linetype = "dashed", size = 1.5) + 
+  geom_point(colour="navyblue", size = 5, shape = 24, fill = "steelblue1") +
   xlab("Song release years") + ylab("Song duration") +
-  ggtitle("Duration of songs throughout the years")
+  ggtitle("Duration of songs throughout the years") +
+  theme_bw()
 
 ################################
 # Task 3

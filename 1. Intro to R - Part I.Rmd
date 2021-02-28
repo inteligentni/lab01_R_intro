@@ -1,8 +1,8 @@
 ---
 title: "Intro to R - Part I"
 output:
-  pdf_document: default
   word_document: default
+  pdf_document: default
 ---
 
 # Install RStudio
@@ -24,8 +24,10 @@ print(class(x))
 
 ## Integer
 ```{r}
-x <- 5L
+x <- 5
 x
+print(class(x))
+x <- 5L
 print(class(x))
 ```
 
@@ -34,6 +36,7 @@ print(class(x))
 x <- "Hello"
 x
 print(class(x))
+x == 'Hello' # use either single or double quotes
 ```
 
 ## Logical (true/false)
@@ -92,10 +95,13 @@ For regularly spaced sequences involving integers, it is simplest to use the col
 
 ```{r}
 # generate a sequence from 1 to 10
-1:10
+a <- 1:10
+a
 
 # generate a sequence from 10 to 1
-10:1
+b <- 10:1
+b
+rev(a)
 
 # generate a sequence from 3.2 to 4.7, with a step 0.2
 seq(3.2, 4.7, by = 0.2)
@@ -108,9 +114,13 @@ Factors are used to represent categorical variables (variables with a limited nu
 ```{r}
 # create a vector and convert to factor
 v2 <- c("cold", "mild", "mild", "hot", "cold")
-temp <- factor(v2)
+temp <- as.factor(v2)
 
-# print all levels 
+# print unique factor values (levels)
+levels(temp)
+
+# specify the order of levels
+temp <- factor(v2, levels = c('cold', 'mild', 'hot'))
 levels(temp)
 
 # print the summary
@@ -126,13 +136,17 @@ v3 <- c(1, NA, 3, 4, NA)
 
 # check which values are NAs
 is.na(v3)
+
+sum(is.na(v3))
 ```
 
 The second kind of *missing* values which are produced by numerical computation, the so-called *Not a Number* (NaN) values [2].
 
 ```{r}
 # NaN missing value
-0/0
+x <- 0/0
+is.na(x)
+is.nan(x)
 ```
 
 *is.na(xx)* is TRUE both for NA and NaN values. *is.nan(xx)* is only TRUE for NaNs.
@@ -180,6 +194,22 @@ beatles
 
 ## Inspecting data frame
 
+The *head* and *tail* functions print first and last several items, respectively, and are often used to get a first glance at a loaded dataset.
+
+```{r}
+# get first several rows
+head(beatles)
+
+# get last several rows
+tail(beatles)
+```
+
+The *str* function is used to inspect the structure of a data frame.
+```{r}
+# str function
+str(beatles)
+```
+
 ```{r}
 # print the number of rows
 nrow(beatles)
@@ -190,31 +220,13 @@ ncol(beatles)
 ```
 
 Produce a summary of data.
-
 ```{r}
 # summary function
 summary(beatles)
 ```
 
-An alternative to *summary* (to an extent), the function *str* can also be used to inspect the data and compactly display the internal structure of a data frame.
 
-```{r}
-# str function
-str(beatles)
-```
-
-The *head* and *tail* functions print first and last several items, respectively.
-
-```{r}
-# get first several rows
-head(beatles)
-
-# get last several rows
-tail(beatles)
-```
-
-*names()* function prints column names. *colnames* can also be used as it works the same on data frames (but not on other data types!).
-
+*colnames()* function prints column names.
 ```{r}
 # get column names
 names(beatles)
@@ -244,9 +256,9 @@ beatles1
 Print a specific element from a data frame. Indexes start from 1.
 
 ```{r}
-# get an element from the row 3, column 1 
-song <- beatles[3, 1]
-song
+# get the title (column 1) of the 3rd song (3rd row)
+song3_title <- beatles[3, 1]
+song3_title
 ```
 
 Retrieve a specific row or several rows by index.
@@ -257,7 +269,7 @@ beatles.subset <- beatles[3,]
 beatles.subset
 
 # get rows at positions from 3 to 6 
-beatles.subset1 <- beatles[3:5,]
+beatles.subset1 <- beatles[3:6,]
 beatles.subset1
 
 # get rows at positions 3 and 6 
@@ -265,7 +277,7 @@ beatles.subset2 <- beatles[c(3,6),]
 beatles.subset2
 ```
 
-Retrieve a specific column by index or by name.
+Retrieve a specific column by index or by name
 
 ```{r}
 # get the second column
@@ -283,13 +295,21 @@ Lastly, we can retrieve rows with a logical index vector.
 # retrieve all songs released before year 1965
 songsBefore1965 <- beatles[beatles$Year < 1965,]
 songsBefore1965
+# alternative
+songsBefore1965 <- subset(beatles, Year < 1965)
+songsBefore1965
+```
 
+```{r}
 # retrieve all songs released before year 1965 with duration lower than 150 seconds
 shortSongsBefore1965 <- beatles[beatles$Year < 1965 & beatles$Duration < 150,]
 shortSongsBefore1965
+# alternative
+shortSongsBefore1965 <- subset(beatles, Year < 1965 & Duration < 150)
+shortSongsBefore1965
 ```
 
-NOTE: Logical operators & and && both perform logical AND operation. But the shorter form performs elementwise comparisons in much the same way as arithmetic operators (it performs logical AND on all elements of both vectors). The longer form evaluates left to right examining only the first element of each vector. The similar difference is between the | and || operators.
+NOTE: Logical operators & and && both perform logical AND operation. But the shorter form performs elementwise comparisons in much the same way as arithmetic operators (it performs logical AND on all elements of both vectors). The longer form evaluates left to right examining only the first element of each vector. The similar difference is between the | and || operators. Therefore, *use the shorter form* both for AND (&) and OR (|)
 
 ## Task 2
 
@@ -306,7 +326,11 @@ The most basic function to create a plot is the *plot(x, y)*, where x and y are 
 
 ```{r}
 # render a basic plot for the given vectors 
-plot(c(2, 8, 5), c(25, 10, 30))
+x <- seq(1, 30, length.out=15)
+x
+y <- seq(5, 35, length.out=15) + 2
+y
+plot(x, y)
 ```
 
 For more advanced plots, [ggplot2](https://ggplot2.tidyverse.org/) library is recommended. *ggplot* function works with data frames and not individual vectors.
@@ -326,19 +350,29 @@ Information that is a part of the data frame has to be specified inside the *aes
 ggplot(beatles, aes(x=Year, y=Duration))
 ```
 
-The blank plot is drawn. Even though the x and y are specified, there are no points or lines in it. This is because, *ggplot* doesn’t assume which plot we want, a scatterplot or a line chart. We have only told the *ggplot* what dataset to use and what columns should be used for x- and y-axis. We haven’t explicitly asked it to draw any points. Plots are drawn by adding layers to the basic plot generated by the *ggplot* function. More specifically, in order to generate a scatter plot, we use the *geom_point()* layer.
+A blank plot is drawn. Even though the x and y are specified, there are no points or lines in it. This is because, *ggplot* doesn’t assume which plot we want - a scatterplot, a line plot or some other type of plot. We have only told the *ggplot* what dataset to use and what columns should be used for x- and y-axis. We haven’t explicitly asked it to draw any points. Plots are drawn by adding layers to the basic plot generated by the *ggplot* function. More specifically, in order to generate a scatter plot, we use the *geom_point()* layer.
 
 ```{r}
-# render a plot for the given data frame with points
+# render a scatter plot for Year and Duration
 ggplot(beatles, aes(x=Year, y=Duration)) + geom_point()
 ```
 
-Similarly, we can plot a bar chart by adding a *geom_col()* layer.
+The plot can be further enhanced by adding a custom x- and y-axis labels, and a title. 
 
 ```{r}
-# render a bar chart
 ggplot(beatles, aes(x=Year, y=Duration)) + 
-  geom_col()
+  geom_point() +
+  xlab("Song release years") + ylab("Song duration") +
+  ggtitle("Duration of songs throughout the years")
+```
+
+We can plot a bar chart by adding a *geom_bar()* layer instead of *geom_point()*.
+*geom_bar()* makes the height of bars proportional to the number of cases in each group, i.e. it makes a bar chart of counts. In this case, we provide only one variable for the x-axis.
+
+```{r}
+# render a bar chart displaying the number of songs in each year
+ggplot(beatles, aes(x=Year)) + 
+  geom_bar()
 ```
 
 In the previous bar chart, we can observe that the x-axis has all values from 1961 to 1968, which is the value interval of the *Year* attribute. These include the years 1962 and 1966 with no songs. If we want to omit these two values, we can convert the *Year* variable into a factor, and now the *Year* variable will have only the following values: 1961, 1963, 1964, 1965, 1967, and 1968. Only these values will be plotted.  
@@ -348,40 +382,34 @@ In the previous bar chart, we can observe that the x-axis has all values from 19
 beatles$Year <- factor(beatles$Year)
 
 # render a bar chart
-ggplot(beatles, aes(x=Year, y=Duration)) + 
-  geom_col()
+ggplot(beatles, aes(x=Year)) + 
+  geom_bar()
 ```
 
-The chart can be further enhanced by adding a custom x- and y-axis labels, and a chart title. The aesthetic *fill* parameter will take different colouring scales by setting the *fill* to be equal to a factor variable.
+Further enhance the chart by adding a custom x- and y-axis labels, and a chart title. The aesthetic *fill* parameter will take different colouring scales by setting the *fill* to be equal to a factor variable.
 
 ```{r}
-# render a bar chart with custom title and axes labels  
-ggplot(beatles, aes(x=Year, y=Duration, fill = Year)) + 
-  geom_col() +
-  xlab("Song release years") + ylab("Song duration") +
-  ggtitle("Duration of songs throughout the years")
-```
-
-*geom_bar()* makes the height of the bar proportional to the number of cases in each group, i.e. it makes a bar chart of counts. In this case, we provide only one variable for the x-axis.
-
-```{r}
-# render a bar chart where the y-axis displays number of cases for each value on the x-axis
-ggplot(beatles, aes(x=Year, fill=Year)) + 
-  geom_bar() +
+ggplot(beatles, aes(x=Year, fill = Year)) + 
+  geom_bar(show.legend = FALSE) +
   xlab("Song release years") + ylab("Number of songs") +
   ggtitle("Number of songs throughout the years")
 ```
 
-A line chart can be added by adding the *geom_line* layer. *geom_line()* tries to connect data points that belong to the same group. Different levels of a factor variable belong to different groups. By specifying *group=1* we indicate we want a single line connecting all the points.
+A line chart can be created by using the *geom_line* layer. *geom_line()* tries to connect data points that belong to the same group. Different levels of a factor variable belong to different groups. By specifying *group=1* we indicate we want a single line connecting all the points.
 
 ```{r}
 # render a line chart for the first five songs with specific line and ponts properties
 ggplot(beatles[1:5,], aes(x=Year, y=Duration, group = 1)) +
-  geom_line(colour = "blue", linetype = "dotted", size = 2) + 
-  geom_point(colour="green", size = 4, shape = 22, fill = "yellow") +
+  geom_line(colour = "steelblue4", linetype = "dashed", size = 1.5) + 
+  geom_point(colour="navyblue", size = 5, shape = 24, fill = "steelblue1") +
   xlab("Song release years") + ylab("Song duration") +
-  ggtitle("Duration of songs throughout the years")
+  ggtitle("Duration of songs throughout the years") +
+  theme_bw()
 ```
+
+For different shapes and line types, see this reference page: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
+
+For color palettes, see this [R Color Cheatsheet](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf).
 
 ## Task 3
 

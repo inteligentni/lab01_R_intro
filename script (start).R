@@ -73,9 +73,10 @@
 # create a vector and convert to factor
 
 
+# print unique factor values (levels)
 
-# print all levels 
 
+# specify the order of levels
 
 
 # print the summary
@@ -122,20 +123,20 @@
 # reading a data frame from the CSV file
 
 
+# head and tail functions
+
+
+
 # print the number of rows
 
 
 # print the number of columns
 
 
-# summary function
-
-
 # str function
 
 
-# head and tail functions
-
+# summary function
 
 
 # retrieve and change column names
@@ -202,30 +203,28 @@
 # include ggplot2 library
 
 
-
 # render a plot for the given data frame (columns Year and Duration)
 
 
-# render a plot for the given data frame with points
-
-
-# render a bar chart
+# render a scatter plot for Year and Duration 
 
 
 
-# render a bar chart
+# render a scatter plot with custom title and axes labels  
 
 
 
-# render a bar chart with custom title and axes labels  
+# render a bar chart displaying the number of songs in each year
 
 
 
-# render a bar chart where the y-axis displays number of cases for each value on the x-axis
+# improve the previous chart so that only years with songs are shown;
+# include title and axes labels
 
 
 
-# render a line chart for the first five songs with specific line and ponts properties
+# render a line chart (Year, Duration) for the first five songs 
+# with specific line and points properties
 
 
 
