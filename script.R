@@ -4,12 +4,12 @@
 
 # Numeric
 
+
 # Integer
 
 
 # Character
 
-x == 'Hello' # use either single or double quotes
 
 # Logical (true/false)
 
@@ -22,7 +22,9 @@ x == 'Hello' # use either single or double quotes
 
 # (+, -, *, /, ^)
 
+
 # get the max value
+
 
 # get the min value
 
@@ -106,6 +108,7 @@ x == 'Hello' # use either single or double quotes
 
 # print the number of columns
 
+
 # str function
 
 
@@ -169,9 +172,12 @@ x == 'Hello' # use either single or double quotes
 
 # include ggplot2 library
 
+
 # render a plot for the given data frame (columns Year and Duration)
 
+
 # render a scatter plot for Year and Duration 
+
 
 # render a scatter plot with custom title and axes labels  
 
@@ -202,6 +208,4 @@ x == 'Hello' # use either single or double quotes
 ################################################################
 # Homework - Complete interactive R tutorials with Swirl
 ################################################################
-install.packages("swirl")
-library("swirl")
-swirl()
+
