@@ -154,16 +154,6 @@ str(beatles)
 # summary function
 summary(beatles)
 
-# retrieve and change column names
-colnames(beatles)
-
-beatles1 <- beatles
-colnames(beatles1) <- c("song_name", "release_year", "duration")
-beatles1
-
-# remove column duration
-beatles1$duration <- NULL
-beatles1
 
 ################################
 # Subsetting
